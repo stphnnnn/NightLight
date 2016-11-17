@@ -37,11 +37,13 @@ void loop() {
   client.flush();
 
   String response = "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n<!DOCTYPE HTML>\r\n<html>\r\n";
+  response += "<style>button {background: #fff; font-size: 18px; width: 100%; height: 200px; border: 2px solid rgb(30,205,151); color: rgb(30, 205, 151); padding: 20px; border-radius: 30px;} button:active { background: rgb(30,205,151); color: #fff; } input:*{ outline: none; }</style>\r\n";
+
   if (value) {
-    response += "<a href=\"on\"><button>ON</button></a>";
+    response += "<a href=\"on\"><button>On</button></a>";
   }
   else {
-    response += "<a href=\"off\"><button>OFF</button></a>";
+    response += "<a href=\"off\"><button>Off</button></a>";
   }
   response += "</html>\n";
 
