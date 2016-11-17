@@ -1,6 +1,6 @@
 #include <ESP8266WiFi.h>
 #include "config.h"
- 
+
 int ledPin = BUILTIN_LED;
 int value = 0;
 WiFiServer server(80);
@@ -15,12 +15,10 @@ void loop() {
   if (!client) {
     return;
   }
-  Serial.println("New client");
   while(!client.available()){
     delay(1);
   }
   String request = client.readStringUntil('\r');
-  Serial.println(request);
   client.flush();
 
   if (request.indexOf("/off") != -1) {
@@ -49,7 +47,13 @@ void loop() {
 
   client.print(response);
   delay(1);
-  Serial.println("Client disonnected");
+}
+
+void initHardware() {
+  Serial.begin(115200);
+  delay(10);
+  pinMode(ledPin, OUTPUT);
+  digitalWrite(ledPin, HIGH);
 }
 
 void connectWiFi() {
@@ -59,16 +63,14 @@ void connectWiFi() {
     delay(500);
     Serial.print(".");
   }
+  while (WiFi.waitForConnectResult() != WL_CONNECTED) {
+    Serial.println("Connection Failed! Rebooting...");
+    delay(5000);
+    ESP.restart();
+  }
   server.begin();
   Serial.println("");
   Serial.print("Server started at: http://");
   Serial.print(WiFi.localIP());
   Serial.println("/");
-}
-
-void initHardware() {
-  Serial.begin(115200);
-  delay(10);
-  pinMode(ledPin, OUTPUT);
-  digitalWrite(ledPin, HIGH);
 }
